@@ -8,31 +8,15 @@
 
 ## 🚀 一键使用（推荐）
 
-无需安装，直接使用：
 
-```bash
-# 一键分析火焰图 - 类似 npx 体验
-curl -fsSL https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py | python3 - profile.html
-
-# 或者下载并分析
-wget -O- https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py | python3 - profile.html
-```
 
 ### 💾 本地安装（可选）
 
 如果你希望本地安装以便反复使用：
 
 ```bash
-# 方式1: 一键安装脚本
-curl -fsSL https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/install.sh | bash
+ npx skills add  https://github.com/hezhizhuoGod/flame-analyzer
 
-# 方式2: 手动下载
-curl -O https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py
-python3 flame_analyzer.py profile.html
-
-# 方式3: 克隆仓库
-git clone https://github.com/hezhizhuoGod/flame-analyzer.git
-cd flame-analyzer && ./install.sh
 ```
 
 安装后使用：
@@ -40,15 +24,6 @@ cd flame-analyzer && ./install.sh
 flame-analyzer profile.html
 ```
 
-## ✨ 特性
-
-- 🔍 **智能解析**: 自动解析async-profiler HTML火焰图格式
-- 🎯 **热点提取**: 智能提取TopN性能热路径
-- 📊 **结构化报告**: 生成Markdown格式的分析报告
-- 🤖 **AI集成**: 自动生成面向AI的性能分析prompt
-- ⚙️ **零依赖**: 仅使用Python标准库，无需额外安装
-- 🛡️ **稳定可靠**: 完整的异常处理和输入验证
-- 📈 **进度可视**: 可选的进度条显示（安装tqdm后启用）
 
 ## 📖 使用方法
 
@@ -113,45 +88,7 @@ done
 find . -name "*.html" | xargs -P 4 -I {} flame-analyzer {} -o ./results
 ```
 
-### CI/CD 集成
 
-```yaml
-# .github/workflows/performance.yml
-name: Performance Analysis
-on: [push, pull_request]
-
-jobs:
-  analyze:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Analyze Flame Graph
-        run: |
-          # 下载并分析火焰图
-          curl -fsSL https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py | python3 - profile.html ./analysis
-
-          # 上传分析报告
-          cp ./analysis/*.md $GITHUB_WORKSPACE/
-
-      - name: Upload Analysis Report
-        uses: actions/upload-artifact@v3
-        with:
-          name: performance-analysis
-          path: "*.md"
-```
-
-### 与性能工具配合
-
-```bash
-# 与 async-profiler 完整工作流
-java -jar async-profiler.jar -d 30 -f profile.html $PID
-curl -fsSL https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py | python3 - profile.html
-
-# 与 JProfiler 配合
-# 1. 导出火焰图为HTML格式
-# 2. 使用本工具分析
-python3 flame_analyzer.py jprofile_export.html
-```
 
 ## 📊 典型应用场景
 
