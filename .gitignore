@@ -139,3 +139,5 @@ htmlcov/
 # Profiling data
 *.prof
 *.html
+.claude
+CLAUDE.md

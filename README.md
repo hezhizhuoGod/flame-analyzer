@@ -2,9 +2,43 @@
 
 [![Python Version](https://img.shields.io/badge/python-3.7+-blue.svg)](https://python.org)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://img.shields.io/badge/tests-passing-green.svg)](tests/)
+[![GitHub Stars](https://img.shields.io/github/stars/hezhizhuoGod/flame-analyzer)](https://github.com/hezhizhuoGod/flame-analyzer)
 
 高性能Java火焰图分析器，自动提取热路径并生成AI优化建议。专为Java性能调优设计，支持async-profiler生成的HTML火焰图。
+
+## 🚀 一键使用（推荐）
+
+无需安装，直接使用：
+
+```bash
+# 一键分析火焰图 - 类似 npx 体验
+curl -fsSL https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py | python3 - profile.html
+
+# 或者下载并分析
+wget -O- https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py | python3 - profile.html
+```
+
+### 💾 本地安装（可选）
+
+如果你希望本地安装以便反复使用：
+
+```bash
+# 方式1: 一键安装脚本
+curl -fsSL https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/install.sh | bash
+
+# 方式2: 手动下载
+curl -O https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py
+python3 flame_analyzer.py profile.html
+
+# 方式3: 克隆仓库
+git clone https://github.com/hezhizhuoGod/flame-analyzer.git
+cd flame-analyzer && ./install.sh
+```
+
+安装后使用：
+```bash
+flame-analyzer profile.html
+```
 
 ## ✨ 特性
 
@@ -12,292 +46,168 @@
 - 🎯 **热点提取**: 智能提取TopN性能热路径
 - 📊 **结构化报告**: 生成Markdown格式的分析报告
 - 🤖 **AI集成**: 自动生成面向AI的性能分析prompt
-- ⚙️ **高度可配置**: 支持JSON配置文件自定义分析参数
+- ⚙️ **零依赖**: 仅使用Python标准库，无需额外安装
 - 🛡️ **稳定可靠**: 完整的异常处理和输入验证
-- 📈 **进度可视**: 可选的进度条显示
+- 📈 **进度可视**: 可选的进度条显示（安装tqdm后启用）
 
-## 🚀 快速开始
-
-### 一键安装
-
-```bash
-# 方式1: 使用curl (推荐)
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/flame-analyzer/main/install.sh | bash
-
-# 方式2: 使用wget
-wget -qO- https://raw.githubusercontent.com/YOUR_USERNAME/flame-analyzer/main/install.sh | bash
-
-# 方式3: 手动克隆
-git clone https://github.com/YOUR_USERNAME/flame-analyzer.git
-cd flame-analyzer
-./install.sh
-```
+## 📖 使用方法
 
 ### 基础用法
 
 ```bash
-# 分析单个火焰图
-flame-analyzer profile.html
+# 分析单个火焰图（生成 hotpaths.md 和 analysis_prompt.md）
+python3 flame_analyzer.py profile.html
 
 # 指定输出目录
-flame-analyzer profile.html -o ./analysis
+python3 flame_analyzer.py profile.html output/
 
-# 使用配置文件
-flame-analyzer profile.html -c config/debug.json
-
-# 快速模式
-flame-analyzer profile.html --quick
-
-# 调试模式
-flame-analyzer profile.html --debug
+# 带详细配置的完整命令示例
+python3 flame_analyzer.py profile.html analysis/ config.json
 ```
 
-## 📦 安装方式
+### 配置文件示例
 
-### 1. 一键安装脚本 (推荐)
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/YOUR_USERNAME/flame-analyzer/main/install.sh | bash
-```
-
-安装脚本会：
-- 自动检测Python环境
-- 安装可选依赖
-- 创建全局命令链接
-- 运行测试验证安装
-
-### 2. 手动安装
-
-```bash
-# 克隆仓库
-git clone https://github.com/YOUR_USERNAME/flame-analyzer.git
-cd flame-analyzer
-
-# 安装依赖 (可选)
-pip install -r requirements.txt
-
-# 运行测试
-python -m pytest tests/
-
-# 创建命令别名
-echo 'alias flame-analyzer="python $(pwd)/scripts/flame_analyzer.py"' >> ~/.bashrc
-source ~/.bashrc
-```
-
-### 3. Docker安装
-
-```bash
-# 使用Docker运行
-docker run --rm -v $(pwd):/workspace your_username/flame-analyzer profile.html
-```
-
-## 📖 详细用法
-
-### 命令行选项
-
-```
-flame-analyzer [OPTIONS] HTML_FILE
-
-位置参数:
-  HTML_FILE          async-profiler生成的HTML火焰图文件
-
-可选参数:
-  -h, --help         显示帮助信息
-  -o, --output DIR   输出目录 (默认: .)
-  -c, --config FILE  配置文件路径
-  -q, --quick        快速分析模式
-  -d, --debug        调试模式 (详细日志)
-  -v, --version      显示版本信息
-```
-
-### 配置文件
-
-支持JSON格式的配置文件：
+创建 `config.json` 自定义分析参数：
 
 ```json
 {
-  "max_depth": 200,       // 最大分析深度
-  "min_pct": 0.005,      // 最小占比阈值 (0.5%)
-  "top_n_paths": 5,      // 提取热路径数量
-  "encoding": "utf-8",   // 文件编码
-  "enable_logging": false, // 启用日志
-  "log_level": "INFO"    // 日志级别
+  "max_depth": 200,
+  "min_pct": 0.005,
+  "top_n_paths": 5,
+  "encoding": "utf-8",
+  "enable_logging": false,
+  "log_level": "INFO"
 }
 ```
 
-### 预设配置
-
-项目提供三种预设配置：
-
-| 配置 | 用途 | 参数 |
-|------|------|------|
-| `default.json` | 标准分析 | 5条路径，0.5%阈值 |
-| `quick.json` | 快速预览 | 10条路径，2%阈值，浅层 |
-| `debug.json` | 详细分析 | 3条路径，1%阈值，详细日志 |
-
 ### 输出文件
 
-工具生成两个主要文件：
+分析完成后会生成两个关键文件：
 
-1. **hotpaths.md** - 热路径分析报告
-   - TopN热路径的完整调用链
-   - 占比、采样数、函数名信息
-   - 树形结构展示
+1. **hotpaths.md** - 详细的性能热点分析报告
+   ```
+   # 性能热点分析报告
+   ## Top 5 热路径
+   ### 路径 1 (15.23%)
+   └── com.example.service.UserService.processUser()
+       └── com.example.dao.UserDao.findById()
+           └── java.sql.PreparedStatement.executeQuery()
+   ```
 
-2. **analysis_prompt.md** - AI分析提示
-   - 预构建的性能分析prompt
-   - 包含角色定义、数据和任务
-   - 可直接用于ChatGPT/Claude等AI工具
+2. **analysis_prompt.md** - AI分析提示（可直接用于ChatGPT/Claude）
+   ```
+   你是一位资深的Java性能优化专家，请分析以下火焰图热路径数据...
+   ```
 
 ## 🔧 高级用法
 
-### 批量分析
+### 批量处理
 
 ```bash
-# 分析目录下所有HTML文件
+# 处理目录下所有HTML文件
 for file in *.html; do
-    flame-analyzer "$file" -o "./results/$(basename "$file" .html)"
+    curl -fsSL https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py | python3 - "$file" "./results/$(basename "$file" .html)"
 done
 
-# 使用xargs并行处理
+# 并行处理（已安装时）
 find . -name "*.html" | xargs -P 4 -I {} flame-analyzer {} -o ./results
 ```
 
-### 集成到CI/CD
+### CI/CD 集成
 
 ```yaml
 # .github/workflows/performance.yml
-- name: Analyze Performance
-  run: |
-    flame-analyzer profile.html -o ./performance-report
-    # 上传报告到artifact或发送到监控系统
+name: Performance Analysis
+on: [push, pull_request]
+
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Analyze Flame Graph
+        run: |
+          # 下载并分析火焰图
+          curl -fsSL https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py | python3 - profile.html ./analysis
+
+          # 上传分析报告
+          cp ./analysis/*.md $GITHUB_WORKSPACE/
+
+      - name: Upload Analysis Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: performance-analysis
+          path: "*.md"
 ```
 
-### 与其他工具协作
+### 与性能工具配合
 
 ```bash
-# 与async-profiler结合使用
+# 与 async-profiler 完整工作流
 java -jar async-profiler.jar -d 30 -f profile.html $PID
-flame-analyzer profile.html -o ./analysis
+curl -fsSL https://raw.githubusercontent.com/hezhizhuoGod/flame-analyzer/main/scripts/flame_analyzer.py | python3 - profile.html
 
-# 与JProfiler结合
-# 导出JProfiler火焰图后使用本工具分析
+# 与 JProfiler 配合
+# 1. 导出火焰图为HTML格式
+# 2. 使用本工具分析
+python3 flame_analyzer.py jprofile_export.html
 ```
 
-## 📊 使用场景
+## 📊 典型应用场景
 
-- **Java应用性能调优**: 识别CPU热点和瓶颈
-- **微服务性能分析**: 跟踪跨服务调用链性能
-- **生产问题排查**: 定位线上性能问题根因
-- **代码优化验证**: 对比优化前后的性能数据
-- **CI/CD性能监控**: 自动化性能回归检测
+- **🔥 生产问题排查**: 快速定位线上性能瓶颈
+- **⚡ 应用性能调优**: 识别CPU热点和优化目标
+- **🔍 微服务调用分析**: 跟踪跨服务性能问题
+- **📈 性能回归检测**: CI/CD中自动化性能监控
+- **🎯 代码Review**: 为性能优化提供数据支持
 
-## 🧪 测试
+## 🛠️ 依赖要求
+
+- **必需**: Python 3.7+ （仅标准库）
+- **可选**: `tqdm` - 提供进度条显示（`pip install tqdm`）
+
+## 🐳 Docker 使用
 
 ```bash
-# 运行所有测试
-python -m pytest tests/ -v
+# 构建镜像
+docker build -t flame-analyzer https://github.com/hezhizhuoGod/flame-analyzer.git
 
-# 运行演示
-python demo.py
-
-# 测试安装
-./test_installation.sh
-```
-
-## 📝 开发
-
-### 项目结构
-
-```
-flame-analyzer/
-├── scripts/
-│   └── flame_analyzer.py      # 主程序
-├── tests/
-│   └── test_flame_analyzer.py # 单元测试
-├── config/
-│   ├── default.json          # 默认配置
-│   ├── quick.json            # 快速配置
-│   └── debug.json            # 调试配置
-├── install.sh                # 安装脚本
-├── requirements.txt          # Python依赖
-└── README.md                 # 项目文档
-```
-
-### 贡献指南
-
-1. Fork 项目
-2. 创建特性分支: `git checkout -b feature/amazing-feature`
-3. 提交更改: `git commit -m 'Add amazing feature'`
-4. 推送分支: `git push origin feature/amazing-feature`
-5. 创建Pull Request
-
-### 本地开发
-
-```bash
-# 克隆仓库
-git clone https://github.com/YOUR_USERNAME/flame-analyzer.git
-cd flame-analyzer
-
-# 安装开发依赖
-pip install -r requirements.txt
-pip install pytest
-
-# 运行测试
-python -m pytest tests/ -v
-
-# 运行代码检查 (可选)
-pip install flake8 black
-flake8 scripts/
-black scripts/
-```
-
-## 🐳 Docker
-
-### 构建镜像
-
-```bash
-docker build -t flame-analyzer .
-```
-
-### 使用Docker
-
-```bash
-# 分析本地文件
+# 分析火焰图
 docker run --rm -v $(pwd):/workspace flame-analyzer /workspace/profile.html
-
-# 交互式使用
-docker run --rm -it -v $(pwd):/workspace flame-analyzer bash
 ```
 
-## 📄 许可证
+## 🤝 贡献指南
 
-本项目基于 [MIT License](LICENSE) 开源。
+欢迎提交Issues和Pull Requests！
 
-## 🤝 致谢
+1. Fork 本项目
+2. 创建特性分支: `git checkout -b feature/awesome-feature`
+3. 提交更改: `git commit -m 'Add awesome feature'`
+4. 推送分支: `git push origin feature/awesome-feature`
+5. 创建 Pull Request
 
-- [async-profiler](https://github.com/jvm-profiling-tools/async-profiler) - 优秀的Java性能分析工具
-- [tqdm](https://github.com/tqdm/tqdm) - 进度条库
-- 所有贡献者和用户的反馈
+## 📄 开源许可
 
-## 📞 支持
+本项目基于 [MIT License](LICENSE) 开源，欢迎自由使用和分发。
 
-- 🐛 [报告Bug](https://github.com/YOUR_USERNAME/flame-analyzer/issues)
-- 💡 [功能建议](https://github.com/YOUR_USERNAME/flame-analyzer/issues)
-- 📧 邮件: your.email@example.com
-- 📚 [文档](https://github.com/YOUR_USERNAME/flame-analyzer/wiki)
+## 🔗 相关链接
 
-## 🔖 版本历史
+- 📚 [详细文档](https://github.com/hezhizhuoGod/flame-analyzer/wiki)
+- 🐛 [问题反馈](https://github.com/hezhizhuoGod/flame-analyzer/issues)
+- 💡 [功能建议](https://github.com/hezhizhuoGod/flame-analyzer/discussions)
+- ⭐ [给个Star支持](https://github.com/hezhizhuoGod/flame-analyzer)
 
-- **v2.0.0** (2024-04-22): 重大更新
-  - 添加配置文件支持
-  - 增强错误处理和验证
-  - 完整的单元测试覆盖
-  - 进度条和用户体验优化
-- **v1.0.0**: 初始版本
-  - 基础火焰图解析功能
-  - 热路径提取和报告生成
+## 🎯 核心优势
+
+| 传统方式 | Flame Analyzer |
+|---------|----------------|
+| 手动分析火焰图 | 自动提取热点路径 |
+| 经验依赖判断 | AI辅助分析建议 |
+| 文本化输出 | 结构化Markdown报告 |
+| 工具链复杂 | 一键下载使用 |
 
 ---
 
-⭐ 如果这个项目对你有帮助，请给个star支持一下！
+> 💡 **提示**: 如果你是性能调优新手，建议先阅读生成的 `analysis_prompt.md` 文件，它包含了专业的AI分析提示，可以直接用于获取优化建议。
+
+⭐ **如果这个工具对你有帮助，请给个Star支持一下！**
