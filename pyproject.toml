@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flame-analyzer"
+version = "2.0.0"
+description = "高性能Java火焰图分析器，自动提取热路径并生成AI优化建议"
+authors = [
+    {name = "Flame Analyzer Contributors", email = "your.email@example.com"}
+]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Debuggers",
+    "Topic :: System :: Monitoring",
+    "Topic :: Software Development :: Quality Assurance",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Environment :: Console",
+]
+keywords = [
+    "java", "performance", "profiling", "flame-graph",
+    "async-profiler", "optimization", "analysis", "ai"
+]
+dependencies = []
+
+[project.optional-dependencies]
+progress = ["tqdm>=4.60.0"]
+dev = [
+    "pytest>=6.0",
+    "flake8",
+    "black",
+    "mypy",
+]
+
+[project.urls]
+Homepage = "https://github.com/YOUR_USERNAME/flame-analyzer"
+Repository = "https://github.com/YOUR_USERNAME/flame-analyzer"
+Documentation = "https://github.com/YOUR_USERNAME/flame-analyzer/blob/main/README.md"
+"Bug Reports" = "https://github.com/YOUR_USERNAME/flame-analyzer/issues"
+
+[project.scripts]
+flame-analyzer = "flame_analyzer.main:main"
+
+[tool.setuptools.packages.find]
+include = ["flame_analyzer*"]
+
+[tool.setuptools.package-data]
+flame_analyzer = ["config/*.json", "templates/*.md"]
+
+[tool.black]
+line-length = 100
+target-version = ['py37']
+
+[tool.mypy]
+python_version = "3.7"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = true
