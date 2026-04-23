@@ -78,7 +78,7 @@ python scripts/flame_analyzer.py profile.html ./output config/debug.json
 ## 输出文件
 
 脚本在输出目录生成：
-
+用户没配置输出目录时，默认为 flame-output目录
 - **`hotpaths.md`**：TopN 热路径结构化分析报告（含调用栈和采样百分比）
 - **`analysis_prompt.md`**：预构建的 AI 性能优化分析 prompt
 
